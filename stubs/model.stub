@@ -1,0 +1,27 @@
+<?php
+
+namespace {{ namespace }};
+
+{{ factoryImport }}
+use App\Models\BaseModel;
+
+class {{ class }} extends BaseModel
+{
+    {{ factory }}
+
+    /**
+     * The table associated with this model.
+     *
+     * @var string
+     */
+    protected $table = '';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        //
+    ];
+}

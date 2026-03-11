@@ -1,0 +1,28 @@
+{
+    "name": "nwidart/organisationsetup",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\OrganisationSetup\\": "app/",
+            "Modules\\OrganisationSetup\\Database\\Factories\\": "database/factories/",
+            "Modules\\OrganisationSetup\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\OrganisationSetup\\Tests\\": "tests/"
+        }
+    }
+}

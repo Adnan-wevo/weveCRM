@@ -1,0 +1,46 @@
+FROM php:8.4-fpm
+
+ARG NODE_VERSION=24
+
+# ── System dependencies ────────────────────────────────────────────────────────
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        git curl wget zip unzip supervisor cron procps gosu \
+        mariadb-client \
+        libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
+        libonig-dev libxml2-dev libssl-dev libicu-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+        pdo_mysql mbstring zip gd exif bcmath opcache pcntl intl \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── PHP extensions (Redis) ─────────────────────────────────────────────────────
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
+# ── Node 24 ───────────────────────────────────────────────────────────────────
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── Composer ──────────────────────────────────────────────────────────────────
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# ── PHP config ────────────────────────────────────────────────────────────────
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
+
+# ── Supervisor ────────────────────────────────────────────────────────────────
+COPY docker/php/supervisord.conf /etc/supervisor/conf.d/app.conf
+
+# ── Cron ──────────────────────────────────────────────────────────────────────
+COPY docker/cron/laravel /etc/cron.d/laravel
+RUN chmod 0644 /etc/cron.d/laravel && crontab /etc/cron.d/laravel
+
+# ── Entrypoint ────────────────────────────────────────────────────────────────
+COPY docker/php/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /var/www/html
+
+EXPOSE 9000
+
+ENTRYPOINT ["/entrypoint.sh"]

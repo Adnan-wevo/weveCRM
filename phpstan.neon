@@ -1,0 +1,26 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+
+parameters:
+
+    paths:
+        - app/
+        - Modules/AccessControl/app/
+        - Modules/OrganisationSetup/app/
+
+    # Level 10 is the highest level
+    level: 5
+
+    ignoreErrors:
+        # Jobs intentionally store userId in constructor for serialization/context;
+        # the property is written once and never read locally — that is by design.
+        -
+            identifier: property.onlyWritten
+            path: app/Jobs/
+        -
+            identifier: property.onlyWritten
+            path: Modules/OrganisationSetup/app/Jobs/
+
+#    excludePaths:
+#        - ./*/*/FileToBeExcluded.php

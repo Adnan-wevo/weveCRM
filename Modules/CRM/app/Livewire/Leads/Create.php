@@ -1,11 +1,11 @@
-(<?php
+<?php
 
 namespace Modules\CRM\Livewire\Leads;
 
 use Livewire\Component;
 use App\Models\Lead;
 
-class CreateModal extends Component
+class Create extends Component
 {
     public string $source = '';
     public string $status = 'new';
@@ -29,14 +29,14 @@ class CreateModal extends Component
         ]);
 
         $this->dispatch('lead-saved');
+
         session()->flash('success', __('Lead created'));
-        $this->reset(['source', 'status', 'contact_id']);
+
+        $this->redirect(route('crm.leads.index'));
     }
 
     public function render()
     {
-        return view('crm::leads.create-modal');
+        return view('crm::leads.create');
     }
 }
-)
-

@@ -55,4 +55,18 @@ docker exec -it wevetel_app_dev php artisan test --compact --filter=Contact
 
 Next Action
 -----------
-I'll create the initial backlog of user stories and acceptance criteria as `docs/CRM-backlog.md` and update the repo TODO list accordingly. Confirm to proceed.
+Implementation status (current)
+-------------------------------
+- Contacts CRUD implemented with Livewire pages and module routes.
+- Leads CRUD implemented with Livewire pages and module routes.
+- Form Builder skeleton implemented with `crm_forms` migration, model, and Livewire index page.
+- Sidebar navigation for CRM (`Contacts`, `Leads`, `Forms`) is guarded by `crm.view`.
+- CRM migrations were aligned and de-duplicated to follow repo migration flow.
+- Automated CRM tests pass in containerized environment.
+
+Verification command
+--------------------
+
+```bash
+docker exec -i wevetel_app_dev php artisan test --compact tests/Feature/Crm/
+```

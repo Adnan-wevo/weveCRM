@@ -79,6 +79,20 @@
                     </flux:sidebar.item>
                 </flux:sidebar.group>
                 @endcan
+
+                @can('crm.view')
+                    <flux:sidebar.group :heading="__('CRM')" class="grid">
+                        <flux:sidebar.item icon="book-open-text" :href="route('crm.contacts.index', $tenantParams)" :current="request()->routeIs('crm.contacts.*')" wire:navigate>
+                            {{ __('Contacts') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="layout-grid" :href="route('crm.leads.index', $tenantParams)" :current="request()->routeIs('crm.leads.*')" wire:navigate>
+                            {{ __('Leads') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="folder-git-2" :href="route('crm.forms.index', $tenantParams)" :current="request()->routeIs('crm.forms.*')" wire:navigate>
+                            {{ __('Forms') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
+                @endcan
             </flux:sidebar.nav>
 
             @impersonating

@@ -2,6 +2,7 @@
 
 namespace Modules\CRM\Livewire\Contacts;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Contact;
@@ -12,7 +13,33 @@ class Index extends Component
 
     public $search = '';
 
-    protected $listeners = ['contactCreated' => '$refresh', 'contactUpdated' => '$refresh'];
+    protected $queryString = ['search'];
+
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    #[On('contact-saved')]
+    public function refreshList(): void
+    {
+        $this->resetPage();
+    }
+
+    public function deleteContact($id)
+    {
+        $contact = Contact::findOrFail($id);
+
+        if (! auth()->user() || (! auth()->user()->can('crm.manage') && $contact->owner_id !== auth()->id())) {
+            session()->flash('error', __('Unauthorized'));
+            return;
+        }
+
+        $contact->delete();
+
+        session()->flash('success', __('Contact deleted'));
+        $this->dispatch('contact-saved');
+    }
 
     public function render()
     {

@@ -1,12 +1,14 @@
-(<?php
+<?php
 
 namespace Modules\CRM\Livewire\Leads;
 
 use Livewire\Component;
 use App\Models\Lead;
 
-class CreateModal extends Component
+class Edit extends Component
 {
+    public Lead $lead;
+
     public string $source = '';
     public string $status = 'new';
     public string $contact_id = '';
@@ -17,26 +19,33 @@ class CreateModal extends Component
         'contact_id' => 'nullable|uuid',
     ];
 
+    public function mount(Lead $lead): void
+    {
+        $this->lead = $lead;
+        $this->source = $lead->source ?? '';
+        $this->status = $lead->status ?? 'new';
+        $this->contact_id = $lead->contact_id ?? '';
+    }
+
     public function save(): void
     {
         $this->validate();
 
-        Lead::create([
+        $this->lead->update([
             'source' => $this->source ?: null,
             'status' => $this->status,
             'contact_id' => $this->contact_id ?: null,
-            'owner_id' => auth()->id(),
         ]);
 
         $this->dispatch('lead-saved');
-        session()->flash('success', __('Lead created'));
-        $this->reset(['source', 'status', 'contact_id']);
+
+        session()->flash('success', __('Lead updated'));
+
+        $this->redirect(route('crm.leads.index'));
     }
 
     public function render()
     {
-        return view('crm::leads.create-modal');
+        return view('crm::leads.edit');
     }
 }
-)
-

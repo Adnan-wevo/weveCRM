@@ -1,4 +1,5 @@
 {
     "AccessControl": true,
-    "OrganisationSetup": true
+    "OrganisationSetup": true,
+    "CRM": true
 }

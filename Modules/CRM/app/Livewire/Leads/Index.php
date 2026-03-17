@@ -1,31 +1,59 @@
-(<?php
+<?php
 
 namespace Modules\CRM\Livewire\Leads;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Lead;
 
 class Index extends Component
 {
-	use WithPagination;
+    use WithPagination;
 
-	public $search = '';
+    public string $search = '';
 
-	protected $listeners = ['leadCreated' => '$refresh', 'leadUpdated' => '$refresh'];
+    protected $queryString = ['search'];
 
-	public function render()
-	{
-		$query = Lead::query()->latest();
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
 
-		if ($this->search) {
-			$query->where('source', 'like', "%{$this->search}%")->orWhere('status', 'like', "%{$this->search}%");
-		}
+    #[On('lead-saved')]
+    public function refreshList(): void
+    {
+        $this->resetPage();
+    }
 
-		$leads = $query->paginate(10);
+    public function deleteLead(string $id): void
+    {
+        $lead = Lead::findOrFail($id);
 
-		return view('crm::leads.index', compact('leads'));
-	}
+        if (! auth()->user()->can('crm.manage') && $lead->owner_id !== auth()->id()) {
+            session()->flash('error', __('Unauthorized'));
+            return;
+        }
+
+        $lead->delete();
+
+        $this->dispatch('lead-saved');
+        session()->flash('success', __('Lead deleted'));
+    }
+
+    public function render()
+    {
+        $query = Lead::query()->with('contact')->latest();
+
+        if ($this->search) {
+            $query->where('source', 'like', "%{$this->search}%")
+                ->orWhere('status', 'like', "%{$this->search}%");
+        }
+
+        $leads = $query->paginate(10);
+
+        return view('crm::leads.index', compact('leads'));
+    }
 }
-)
+
 

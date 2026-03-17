@@ -72,6 +72,23 @@ This project is built on the **TALL stack** — a modern, full-stack PHP web dev
 - **Audit Trail** -- Complete model change tracking with old/new value diffs, accessible through history modals.
 - **Import/Export Pipeline** -- Queued Excel import and export with validation preview, progress polling, and signed download URLs.
 - **API Layer** -- Versioned RESTful API (v1) with Sanctum token authentication and auto-generated Scribe documentation.
+- **CRM Module (Core)** -- Contacts and Leads CRUD (Livewire) plus Form Builder skeleton under `Modules/CRM`.
+
+### CRM Quick Usage
+
+The CRM module is enabled via `modules_statuses.json` and exposes these routes after login:
+
+- `/crm/contacts` (`crm.contacts.index`)
+- `/crm/leads` (`crm.leads.index`)
+- `/crm/forms` (`crm.forms.index`)
+
+To access CRM sidebar links, grant `crm.view` permission to the user/role.
+
+Run targeted CRM tests:
+
+```bash
+docker exec -i wevetel_app_dev php artisan test --compact tests/Feature/Crm/
+```
 
 ---
 

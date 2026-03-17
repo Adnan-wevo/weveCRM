@@ -14,11 +14,11 @@ class LeadFactory extends Factory
     public function definition(): array
     {
         return [
-            'source' => $this->faker->word(),
+            'source' => 'import',
             'status' => 'new',
             'contact_id' => Contact::factory(),
             'owner_id' => User::factory(),
-            'score' => $this->faker->numberBetween(0, 100),
+            'score' => 0,
         ];
     }
 }

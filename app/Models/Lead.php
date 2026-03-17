@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lead extends BaseModel
 {
+    use HasFactory;
     protected $table = 'leads';
 
     protected $guarded = [];

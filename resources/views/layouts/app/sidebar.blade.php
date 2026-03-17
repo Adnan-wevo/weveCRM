@@ -82,6 +82,9 @@
 
                 @can('crm.view')
                     <flux:sidebar.group :heading="__('CRM')" class="grid">
+                        <flux:sidebar.item icon="layout-grid" :href="route('crm.dashboard', $tenantParams)" :current="request()->routeIs('crm.dashboard')" wire:navigate>
+                            {{ __('CRM Dashboard') }}
+                        </flux:sidebar.item>
                         <flux:sidebar.item icon="book-open-text" :href="route('crm.contacts.index', $tenantParams)" :current="request()->routeIs('crm.contacts.*')" wire:navigate>
                             {{ __('Contacts') }}
                         </flux:sidebar.item>
@@ -91,6 +94,12 @@
                         <flux:sidebar.item icon="folder-git-2" :href="route('crm.forms.index', $tenantParams)" :current="request()->routeIs('crm.forms.*')" wire:navigate>
                             {{ __('Forms') }}
                         </flux:sidebar.item>
+                            <flux:sidebar.item icon="chevrons-up-down" :href="route('crm.pipeline.index', $tenantParams)" :current="request()->routeIs('crm.pipeline.*')" wire:navigate>
+                                {{ __('Pipeline') }}
+                            </flux:sidebar.item>
+                                <flux:sidebar.item icon="book-open-text" :href="route('crm.calls.index', $tenantParams)" :current="request()->routeIs('crm.calls.*')" wire:navigate>
+                                    {{ __('Calls') }}
+                                </flux:sidebar.item>
                     </flux:sidebar.group>
                 @endcan
             </flux:sidebar.nav>

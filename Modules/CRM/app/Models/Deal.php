@@ -2,10 +2,13 @@
 
 namespace Modules\CRM\Models;
 
+use App\Models\Contact;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\CRM\Database\Factories\DealFactory;
 
 class Deal extends Model
 {
@@ -26,6 +29,11 @@ class Deal extends Model
         'tenant_id',
     ];
 
+    protected static function newFactory(): DealFactory
+    {
+        return DealFactory::new();
+    }
+
     protected function casts(): array
     {
         return [
@@ -34,13 +42,18 @@ class Deal extends Model
         ];
     }
 
-    public function company()
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
-    public function contact()
+    public function contact(): BelongsTo
     {
-        return $this->belongsTo(Contact::class, 'contact_id', 'id');
+        return $this->belongsTo(Contact::class, 'contact_id');
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'owner_id');
     }
 }
